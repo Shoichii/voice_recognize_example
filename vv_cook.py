@@ -67,25 +67,30 @@ def listen():
                         keyphrase = get_keyphrase(answer['text'])
                         # определяем какой рецепт
                         answer_data = get_answer_data(keyphrase)
-                        number_of_matches = len(answer_data)
-                        print(f'Найдено {number_of_matches} совпадений')
-                        # тут наверно можно говорить дальше и дальше
-                        # пока не будет услышан нужный вариант
-                        # либо отменить вовсе и перефразировать вопрос
-                        best_result = answer_data[0][0]
-                        track_name = ''
-                        for item in loader.db_list_keyphrases:
-                            if item.get('keyphrase') == best_result:
-                                track_name = item.get('answer')
-                                break
-                        print('Ответ: ', track_name)
-                        print(track_name)
-                        if track_name:
-                            # Запускаем воспроизведение
-                            # аудио в отдельном потоке
-                            audio_thread = Thread(
-                                target=play_audio, args=(track_name,))
-                            audio_thread.start()
+                        print('answer_data', answer_data)
+                        number_of_matches = 0
+                        if answer_data:
+                            number_of_matches = len(answer_data)
+                            print(f'Найдено {number_of_matches} совпадений')
+                            # тут наверно можно говорить дальше и дальше
+                            # пока не будет услышан нужный вариант
+                            # либо отменить вовсе и перефразировать вопрос
+                            best_result = answer_data[0][0]
+                            track_name = ''
+                            for item in loader.db_list_keyphrases:
+                                if item.get('keyphrase') == best_result:
+                                    track_name = item.get('answer')
+                                    break
+                            print('Ответ: ', track_name)
+                            print(track_name)
+                            if track_name:
+                                # Запускаем воспроизведение
+                                # аудио в отдельном потоке
+                                audio_thread = Thread(
+                                    target=play_audio, args=(track_name,))
+                                audio_thread.start()
+                        else:
+                            print('Не найдено совпадений')
 
 
 if __name__ == '__main__':
