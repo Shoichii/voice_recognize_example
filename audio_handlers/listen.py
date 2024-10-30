@@ -2,8 +2,8 @@ import pyaudio
 import json
 from threading import Thread
 import loader
-from text_handlers import get_keyphrase, get_answer_data
-from play_stream import play_audio
+from .text_handlers import get_keyphrase, get_answer_data
+from .play_stream import play_audio
 
 
 def listen():
