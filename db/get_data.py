@@ -1,3 +1,4 @@
+import json
 list_db_data = [
     {
         'question': 'С каким графиком я буду работать?',
@@ -92,3 +93,27 @@ list_db_data = [
         'answer': 'Масло срок'
     },
 ]
+
+
+# Чтение файла с вопросами и ответами
+with open('./db/questions.txt', 'r', encoding='utf-8') as file:
+    lines = file.readlines()
+
+# Преобразование строк в список словарей
+data = []
+for line in lines:
+    question, answer = line.strip().split('|')
+    data.append({
+        'question': question.strip(),
+        'answer': answer.strip()
+    })
+
+# Создание переменной списка с вопросами и ответами
+list_db_data = [*list_db_data, *data]
+
+# # Сохранение в JSON формате
+# with open('questions.json', 'w', encoding='utf-8') as json_file:
+#     json.dump(list_db_data, json_file, ensure_ascii=False, indent=4)
+
+# Вывод для проверки
+print(len(list_db_data))
