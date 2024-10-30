@@ -5,7 +5,7 @@ import spacy
 
 # инициализация потока прослушивания
 start_listening_event = Event()
-commands_pause_event = Event()
+playing_audio_event = Event()
 model = Model("small")
 rec = KaldiRecognizer(model, 16000)
 p = pyaudio.PyAudio()

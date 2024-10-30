@@ -18,7 +18,9 @@ def play_audio(name):
         stream.write(data)
         data = wf.readframes(chunk)
 
-    loader.commands_pause_event.clear()
     stream.stop_stream()
     stream.close()
     p.terminate()
+    # print('play audio 1', loader.playing_audio_event.is_set())
+    loader.playing_audio_event.clear()
+    # print('play audio 2', loader.playing_audio_event.is_set())

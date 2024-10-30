@@ -34,26 +34,31 @@ def listen():
                     # включение/выключение прослушивания команд
                     if 'рецепт' in answer['text'] and not loader.start_listening_event.is_set():
                         loader.start_listening_event.set()
-                        print('начинаю слушать команды')
+                        print('>>>СЛУШАЮ КОМАНДЫ<<<')
                         break
                     if "отмен" in answer['text']:
-                        loader.commands_pause_event.clear()
+                        loader.playing_audio_event.clear()
                         loader.start_listening_event.clear()
-                        print('прекращаю слушать команды')
+                        print('>>>НЕ СЛУШАЮ КОМАНДЫ<<<')
                         break
 
                     # слушаем команды
-                    if not loader.commands_pause_event.is_set() \
+                    # print('==========================')
+                    # print('1', loader.playing_audio_event.is_set())
+                    # print('2', loader.start_listening_event.is_set())
+                    # print('==========================')
+                    if not loader.playing_audio_event.is_set() \
                             and loader.start_listening_event.is_set():
                         # ловим фразу и разбиваем на ключевые слова
-                        keyphrase = get_keyphrase(answer['text'])
+                        text = answer['text']
+                        keyphrase = get_keyphrase(text)
                         # определяем какой рецепт
                         answer_data = get_answer_data(keyphrase)
-                        print('answer_data', answer_data)
                         number_of_matches = 0
                         if answer_data:
                             number_of_matches = len(answer_data)
                             print(f'Найдено {number_of_matches} совпадений')
+                            print('найденые совпадения', answer_data)
                             # тут наверно можно говорить дальше и дальше
                             # пока не будет услышан нужный вариант
                             # либо отменить вовсе и перефразировать вопрос
@@ -66,10 +71,10 @@ def listen():
                             if track_name:
                                 # Запускаем воспроизведение
                                 # аудио в отдельном потоке
-                                loader.commands_pause_event.set()
+                                loader.playing_audio_event.set()
+                                # print('3', loader.playing_audio_event.is_set())
                                 audio_thread = Thread(
                                     target=play_audio, args=(track_name,))
                                 audio_thread.start()
                         else:
                             print('Не найдено совпадений')
-                        break
